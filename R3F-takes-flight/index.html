@@ -5,9 +5,28 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flying with three js</title>
+    <style>
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+    </style>
   </head>
   <body>
+    <img id="instructionImage" src="/src/images/instructionImage.png" alt="Instruction Image" style="position: fixed; padding: 10vh; height: 30vh; right: 0; bottom: 0; z-index: 10; animation: fadeOut 3s ease-in-out 12s forwards;" />
+    <img id="exploreButton" src="/src/images/land.png" alt="Explore Button" style="position: fixed; padding-bottom: 20vh; height: 10vh; bottom: 0; z-index: 10; display: none; left: 50%; transform: translateX(-50%);" />
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script type="module">
+      // clickHandler.js에서 클릭 핸들러 함수를 가져와서 사용
+      import { handleExploreButtonClick } from '/src/clickHandler.js';
+    
+      // Explore 버튼 클릭 시 클릭 핸들러 함수 실행
+      document.getElementById("exploreButton").addEventListener("click", handleExploreButtonClick);
+    </script>
   </body>
 </html>

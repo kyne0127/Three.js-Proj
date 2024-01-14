@@ -1,43 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { PerspectiveCamera, Environment } from "@react-three/drei";
+import { PerspectiveCamera, Environment, Float, OrbitControls } from "@react-three/drei";
 import { EffectComposer, HueSaturation } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import { SphereEnv } from "./SphereEnv";
 import { Airplane } from "./Airplane";
 import { Targets } from "./Targets";
 import { MotionBlur } from "./MotionBlur";
-import { isThirdPerson } from "./controls";
+import { LittlePrincePlanet } from "./LittlePrincePlanet";
 
 function App() {
-  const [isThirdPerson, setIsThirdPerson] = useState(false);
-  const [cameraPosition, setCameraPosition] = useState([-6, 3.9, 6.21]);
+
+  const [isOmnicient, setIsOmnicient] = useState(false);
 
   useEffect(() => {
     function keydownHandler(e) {
       if (e.key == 'k') {
-        if(isThirdPerson) setCameraPosition([-6, 3.9, 6.21 + Math.random() + 0.01]);
-        setIsThirdPerson(!isThirdPerson);
+        console.log('k pressed');
+        setIsOmnicient(!isOmnicient);
+        console.log('isOmnicient: ', isOmnicient);
       }
     }
 
     window.addEventListener("keydown", keydownHandler);
     return () => window.removeEventListener("keydown", keydownHandler);
-  }, [isThirdPerson]);
+  }, [isOmnicient]);
+
 
   return (
     <>
+      <OrbitControls/>
       <SphereEnv />
-      <Environment background={false} files={"assets/textures/envmap.hdr"} />
+      <Environment background={false} files={"assets/textures/envmap.hdr"} backgroundIntensity={0.5} />
 
-      <PerspectiveCamera makeDefault position={[0, 10, 10]} fov={40} />
+      <PerspectiveCamera fov={40} />
 
-      <Airplane />
+      {isOmnicient && (
+        <PerspectiveCamera makeDefault position={[-6, 7.5, 6.21]} fov={80} />
+      )}
+      <Float floatIntensity={0.3} speed={0.6} rotationIntensity={0.001}>
+        <Airplane isOmnicient={isOmnicient} />
+      </Float>
+
       <Targets />
+
+      <LittlePrincePlanet />
 
       <directionalLight
         castShadow
-        color={"#ffb5f6"}
-        intensity={6}
+        color={"#fffbd6"}
+        intensity={3}
         position={[10, 5, 4]}
         shadow-bias={-0.0005}
         shadow-mapSize-width={1024}

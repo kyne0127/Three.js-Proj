@@ -2,31 +2,30 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
 import { Matrix4, Quaternion, Vector3 } from 'three';
-import { updatePlaneAxis, isThirdPerson } from './controls';
+import { updatePlaneAxis } from './controls';
 
 const x = new Vector3(1, 0, 0);
 const y = new Vector3(0, 1, 0);
 const z = new Vector3(0, 0, 1);
-export const planePosition = new Vector3(0, 3, 7);
+export const planePosition = new Vector3(-1.5, 3, 3);
 
 const delayedRotMatrix = new Matrix4();
 const delayedQuaternion = new Quaternion();
 
-export function Airplane(props) {
-  // thanks to:
-  // https://sketchfab.com/3d-models/vintage-toy-airplane-7de2ecbc0acb4b1886c3df3d196c366b
+export function Airplane({isOmnicient}) {
   const { nodes, materials } = useGLTF('assets/models/airplane.glb');
   const groupRef = useRef();
+  const planeRef = useRef();
   const helixMeshRef = useRef();
 
   useFrame(({ camera }) => {
-    updatePlaneAxis(x, y, z, planePosition, camera);
+    updatePlaneAxis(x, y, z, planePosition, camera, planeRef);
 
     const rotMatrix = new Matrix4().makeBasis(x, y, z);
 
     const matrix = new Matrix4()
-    .multiply(new Matrix4().makeTranslation(planePosition.x, planePosition.y, planePosition.z))
-    .multiply(rotMatrix);
+      .multiply(new Matrix4().makeTranslation(planePosition.x, planePosition.y, planePosition.z))
+      .multiply(rotMatrix);
 
     groupRef.current.matrixAutoUpdate = false;
     groupRef.current.matrix.copy(matrix);
@@ -51,14 +50,15 @@ export function Airplane(props) {
     delayedRotMatrix.identity();
     delayedRotMatrix.makeRotationFromQuaternion(delayedQuaternion);
 
-    if (!isThirdPerson) {
+    if (!isOmnicient) {
+      console.log('view updated; isOmnicient:', isOmnicient);
       const cameraMatrix = new Matrix4()
-      .multiply(new Matrix4().makeTranslation(planePosition.x, planePosition.y, planePosition.z))
-      .multiply(delayedRotMatrix)
-      .multiply(new Matrix4().makeRotationX(-0.2))
-      .multiply(
-        new Matrix4().makeTranslation(0, 0.015, 0.3)
-      );
+        .multiply(new Matrix4().makeTranslation(planePosition.x, planePosition.y, planePosition.z))
+        .multiply(delayedRotMatrix)
+        .multiply(new Matrix4().makeRotationX(-0.2))
+        .multiply(
+          new Matrix4().makeTranslation(0, 0.015, 0.6)
+        );
 
       camera.matrixAutoUpdate = false;
       camera.matrix.copy(cameraMatrix);
@@ -72,14 +72,22 @@ export function Airplane(props) {
   return (
     <>
       <group ref={groupRef}>
-        <group {...props} dispose={null} scale={0.01} rotation-y={Math.PI}>
+        <group ref={planeRef} dispose={null} scale={0.03} rotation-y={Math.PI}>
           <mesh geometry={nodes.supports.geometry} material={materials['Material.004']} />
           <mesh geometry={nodes.chassis.geometry} material={materials['Material.005']} />
-          <mesh geometry={nodes.helix.geometry} material={materials['Material.005']} ref={helixMeshRef} />
+          <mesh geometry={nodes.face.geometry} material={materials['Material.007']} />
+          <mesh geometry={nodes.scarf.geometry} material={materials['Material.001']} />
+          <mesh geometry={nodes.eyes.geometry} material={materials['Material.002']} />
+          <mesh geometry={nodes.eyebrow.geometry} material={materials['Material.001']} />
+          <mesh geometry={nodes.belt.geometry} material={materials['Material.005']} />
+          <mesh geometry={nodes.upperbody.geometry} material={materials['Material.008']} />
+          <mesh geometry={nodes.hair.geometry} material={materials['Material.001']} />
+          <mesh geometry={nodes.helix.geometry} material={materials['Material.006']} ref={helixMeshRef} />
         </group>
       </group>
     </>
-  )
+  );
 }
 
 useGLTF.preload('assets/models/airplane.glb');
+
