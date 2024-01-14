@@ -7,6 +7,12 @@ import { Airplane } from "./Airplane";
 import { Targets } from "./Targets";
 import { MotionBlur } from "./MotionBlur";
 import { LittlePrincePlanet } from "./LittlePrincePlanet";
+import { Planet_King } from "./Planet_King";
+import { Planet_Drunken } from "./Planet_Drunken";
+import { Planet_Lamplighter } from "./Planet_Lamplighter";
+import { Planet_Businessman } from "./Planet_Businessman";
+import { Planet_Geographer } from "./Planet_Geographer";
+import { Planet_Vanity } from "./Planet_Vanity";
 
 function App() {
 
@@ -35,7 +41,7 @@ function App() {
       <PerspectiveCamera fov={40} />
 
       {isOmnicient && (
-        <PerspectiveCamera makeDefault position={[-6, 7.5, 6.21]} fov={80} />
+        <PerspectiveCamera makeDefault position={[-6.539644387045074, 7.079071754608387, -2.948639921064562]} fov={60} rotation={[-1.8260317071299612, -0.6032098080001514, -2.0018962883147546]}/>
       )}
       <Float floatIntensity={0.3} speed={0.6} rotationIntensity={0.001}>
         <Airplane isOmnicient={isOmnicient} />
@@ -66,6 +72,13 @@ function App() {
         intensity={1} // 필요에 따라 강도 조정
         position={[10, 5, 4]} // 필요에 따라 위치 조정
       />
+      <Planet_King />
+      <Planet_Drunken />
+      <Planet_Lamplighter />
+      <Planet_Businessman />
+      <Planet_Geographer />
+      <Planet_Vanity />
+
     </>
   );
 }

@@ -7,7 +7,7 @@ import { updatePlaneAxis } from './controls';
 const x = new Vector3(1, 0, 0);
 const y = new Vector3(0, 1, 0);
 const z = new Vector3(0, 0, 1);
-export const planePosition = new Vector3(-1.5, 3, 3);
+export const planePosition = new Vector3(-2.8, 0, 5.4);
 
 const delayedRotMatrix = new Matrix4();
 const delayedQuaternion = new Quaternion();
@@ -50,6 +50,9 @@ export function Airplane({isOmnicient}) {
     delayedRotMatrix.identity();
     delayedRotMatrix.makeRotationFromQuaternion(delayedQuaternion);
 
+    console.log(camera.position);
+    console.log(camera.rotation);
+
     if (!isOmnicient) {
       console.log('view updated; isOmnicient:', isOmnicient);
       const cameraMatrix = new Matrix4()
@@ -64,7 +67,6 @@ export function Airplane({isOmnicient}) {
       camera.matrix.copy(cameraMatrix);
       camera.matrixWorldNeedsUpdate = true;
     }
-
 
     helixMeshRef.current.rotation.z -= 1.0;
   });

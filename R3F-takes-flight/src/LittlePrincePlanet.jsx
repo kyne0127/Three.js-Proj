@@ -5,7 +5,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
 
-export const littlePrincePlanetPosition = new Vector3(-1.5, 3, 3.3);
+export const littlePrincePlanetPosition = new Vector3(-1, 3, 5);
 
 export function LittlePrincePlanet(props) {
   const groupRef = useRef();
@@ -35,7 +35,7 @@ export function LittlePrincePlanet(props) {
   return (
     <>
       <group ref={groupRef}>
-        <group {...props} dispose={null} scale = {0.1} position={[-1.5, 2.9, 3.3]}>
+        <group {...props} dispose={null} scale = {0.1} position={[-3.3, -0.1, 5.4]}>
           <mesh geometry={nodes.Fences.geometry} material={materials['Material.006']} />
           <mesh geometry={nodes.Clouds.geometry} material={materials['Material.001']} />
           <mesh geometry={nodes.Rose.geometry} material={materials['Material.005']} />
