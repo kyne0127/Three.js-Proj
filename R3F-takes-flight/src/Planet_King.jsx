@@ -4,13 +4,14 @@ import { useFrame } from '@react-three/fiber';
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
+import { findClosestPlanet } from "./clickHandler";
 import GUI from 'lil-gui';
 
-export const Planet_King_position = new Vector3(0.45, -0.4, 3.9);
+export const Planet_King_position = new Vector3(0.45, 0, 3.9);
 const Planet_King_center = new Vector3(0.45, 0, -1.35);
 const planetRadius = 1.7;
 
-export function Planet_King(props) {
+export function Planet_King({explorebuttonClicked}) {
   const groupRef = useRef();
   const {nodes, materials} = useGLTF('assets/models/king_planet.glb');
   const { nodes: textNodes, materials: textMaterials } = useGLTF('assets/models/king_planet_text.glb'); // 'nodes' 및 'materials' 객체를 분리하여 가져옵니다.
@@ -84,15 +85,28 @@ export function Planet_King(props) {
 
 
   useEffect(() => {
-    const landingImage = document.getElementById('exploreButton');
-    if (landingImage) {
+    const exploreButton = document.getElementById('exploreButton');
+    const leaveButton = document.getElementById('leaveButton');
+
+    console.log('little_prince', explorebuttonClicked);
+    if (exploreButton) {
       if (land) {
-        landingImage.style.display = 'block'; // 랜딩 상태일 때 이미지 표시
-      } else {
-        landingImage.style.display = 'none'; // 랜딩 상태가 아닐 때 이미지 숨김
+        if (!explorebuttonClicked){
+          exploreButton.style.display = 'block'; // 랜딩 상태일 때 이미지 표시
+          leaveButton.style.display = 'none';
+        }
+        else{
+          exploreButton.style.display = 'none';
+          leaveButton.style.display = 'block';
+        }
+      } else{
+        if (findClosestPlanet().position == Planet_King_position && !explorebuttonClicked) {
+          exploreButton.style.display = 'none';
+          leaveButton.style.display = 'none';
+        }
       }
     }
-  }, [land]);
+  }, [land, explorebuttonClicked]);
 
     // 생쥐 초기 위치 및 방향 설정
     useEffect(() => {
@@ -132,7 +146,7 @@ export function Planet_King(props) {
   return (
     <>
       <group ref={groupRef} onClick={handleGroupClick}>
-        <group {...props} dispose={null} scale = {0.1} position={[0.45, -0.4, 3.9]}>
+        <group dispose={null} scale = {0.1} position={[0.45, -0.4, 3.9]}>
           <mesh geometry={nodes.body.geometry} material={materials['Material']} />
           <mesh geometry={nodes.Chair.geometry} material={materials['UV1304']} />
           <mesh geometry={nodes.Chair_back.geometry} material={materials['UV1305']} />

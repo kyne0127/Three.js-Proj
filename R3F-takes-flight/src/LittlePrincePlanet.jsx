@@ -4,6 +4,7 @@ import { useFrame } from '@react-three/fiber';
 import { Matrix4, Quaternion, Vector3 } from 'three';
 import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
+import { findClosestPlanet } from "./clickHandler";
 
 export const Planet_LittlePrince_position = new Vector3(-3.3, -0.1, 5.4);
 
@@ -25,6 +26,8 @@ export function Planet_LittlePrince({explorebuttonClicked}) {
   useEffect(() => {
     const exploreButton = document.getElementById('exploreButton');
     const leaveButton = document.getElementById('leaveButton');
+
+    console.log('little_prince', explorebuttonClicked);
     if (exploreButton) {
       if (land) {
         if (!explorebuttonClicked){
@@ -34,11 +37,12 @@ export function Planet_LittlePrince({explorebuttonClicked}) {
         else{
           exploreButton.style.display = 'none';
           leaveButton.style.display = 'block';
-
         }
-      } else {
-        exploreButton.style.display = 'none'; // 랜딩 상태가 아닐 때 이미지 숨김
-        leaveButton.style.display = 'none';
+      } else{
+        if (findClosestPlanet().position == Planet_LittlePrince_position && !explorebuttonClicked) {
+          exploreButton.style.display = 'none';
+          leaveButton.style.display = 'none';
+        }
       }
     }
   }, [land, explorebuttonClicked]);
