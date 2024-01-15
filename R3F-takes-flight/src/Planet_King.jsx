@@ -10,6 +10,7 @@ import GUI from 'lil-gui';
 export const Planet_King_position = new Vector3(0.45, 0, 3.9);
 const Planet_King_center = new Vector3(0.45, 0, -1.35);
 const planetRadius = 1.7;
+var gui = null;
 
 export function Planet_King({explorebuttonClicked}) {
   const groupRef = useRef();
@@ -24,7 +25,8 @@ export function Planet_King({explorebuttonClicked}) {
 
   useEffect(() => {
     if (land) {
-      const gui = new GUI();
+      gui = new GUI();
+      console.log(gui);
       
       const mouseNumber = {
         mouse_number: 0
@@ -34,8 +36,14 @@ export function Planet_King({explorebuttonClicked}) {
         .min(0)
         .max(10)
         .step(1)
-        .name("mouse count")
+        .name("mouse counfet")
         .onChange((value) => setMouseCount(value));
+    } else if (land == false) {
+      console.log(gui);
+      if (gui) {
+        console.log("on");
+        gui.destroy();
+      }
     }
   }, [land]);
 
