@@ -7,7 +7,7 @@ import { planePosition } from './Airplane';
 
 export const Planet_Vanity_position = new Vector3(3.15, 0, 2.4);
 
-export function Planet_Vanity(props) {
+export function Planet_Vanity({explorebuttonClicked}) {
   const groupRef = useRef();
   const {nodes, materials} = useGLTF('assets/models/little_prince_planet.glb');
   const [land, setLand] = useState(false);
@@ -35,7 +35,7 @@ export function Planet_Vanity(props) {
   return (
     <>
       <group ref={groupRef}>
-        <group {...props} dispose={null} scale = {0.1} position={[3.15, -0.1, 2.4]}>
+        <group dispose={null} scale = {0.1} position={[3.15, -0.1, 2.4]}>
           <mesh geometry={nodes.Fences.geometry} material={materials['Material.006']} />
           <mesh geometry={nodes.Clouds.geometry} material={materials['Material.001']} />
           <mesh geometry={nodes.Rose.geometry} material={materials['Material.005']} />

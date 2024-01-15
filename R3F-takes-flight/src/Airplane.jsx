@@ -7,12 +7,12 @@ import { updatePlaneAxis } from './controls';
 const x = new Vector3(1, 0, 0);
 const y = new Vector3(0, 1, 0);
 const z = new Vector3(0, 0, 1);
-export const planePosition = new Vector3(-2.8, 0, 5.4);
+export const planePosition = new Vector3(-2.7, 0, 5.4);
 
 const delayedRotMatrix = new Matrix4();
 const delayedQuaternion = new Quaternion();
 
-export function Airplane({isOmnicient}) {
+export function Airplane({ isOmnicient, explorebuttonClicked }) {
   const { nodes, materials } = useGLTF('assets/models/airplane.glb');
   const groupRef = useRef();
   const planeRef = useRef();
@@ -53,8 +53,11 @@ export function Airplane({isOmnicient}) {
     // console.log(camera.position);
     // console.log(camera.rotation);
 
-    if (!isOmnicient) {
-      console.log('view updated; isOmnicient:', isOmnicient);
+    // console.log('view updated; isOmnicient:', isOmnicient, 'explorebuttonClicked:', explorebuttonClicked);
+    // console.log(!isOmnicient && !explorebuttonClicked);
+
+    if (!isOmnicient && !explorebuttonClicked) {
+      // console.log('view updated; isOmnicient:', isOmnicient);
       const cameraMatrix = new Matrix4()
         .multiply(new Matrix4().makeTranslation(planePosition.x, planePosition.y, planePosition.z))
         .multiply(delayedRotMatrix)
@@ -83,7 +86,7 @@ export function Airplane({isOmnicient}) {
           <mesh geometry={nodes.eyebrow.geometry} material={materials['Material.001']} />
           <mesh geometry={nodes.belt.geometry} material={materials['Material.005']} />
           <mesh geometry={nodes.upperbody.geometry} material={materials['Material.008']} />
-          <mesh geometry={nodes.hair.geometry} material={materials['Material.001']} />
+          <mesh geometry={nodes.hair.geometry} material={materials['Material.003']} />
           <mesh geometry={nodes.helix.geometry} material={materials['Material.006']} ref={helixMeshRef} />
         </group>
       </group>

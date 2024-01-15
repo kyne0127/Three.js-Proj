@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { PerspectiveCamera, Environment, OrbitControls, Float } from "@react-three/drei";
-import { EffectComposer, HueSaturation } from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
 import { SphereEnv } from "./SphereEnv";
 import { Airplane } from "./Airplane";
 import { Targets } from "./Targets";
-import { Mesh, SphereGeometry, MeshStandardMaterial, Vector3, CatmullRomCurve3 } from "three";
+import { SphereGeometry, Vector3, CatmullRomCurve3 } from "three";
 import { mergeBufferGeometries } from "three-stdlib";
 import { Planet_Businessman } from "./Planet_Businessman";
 import { Planet_Drunken } from "./Planet_Drunken";
@@ -14,11 +12,12 @@ import { Planet_King } from "./Planet_King";
 import { Planet_Lamplighter } from "./Planet_Lamplighter";
 import { Planet_Vanity } from "./Planet_Vanity";
 import { Planet_LittlePrince } from "./LittlePrincePlanet";
+import { findClosestPlanet } from "./clickHandler";
 
 const LINE_NB_POINTS = 100;
 
 function App() {
-
+  // Guide the airplane along a path
   const curve = useMemo(() => {
     return new CatmullRomCurve3(
       [
@@ -41,7 +40,7 @@ function App() {
 
   const linePoints = useMemo(() => {
     return curve.getPoints(LINE_NB_POINTS);
-  }, [curve]);  
+  }, [curve]);
 
   const geometry = useMemo(() => {
     let geo;
@@ -57,6 +56,7 @@ function App() {
     return geo;
   }, [linePoints]);
 
+  // Omnicient view
   const [isOmnicient, setIsOmnicient] = useState(false);
 
   useEffect(() => {
@@ -72,6 +72,48 @@ function App() {
     return () => window.removeEventListener("keydown", keydownHandler);
   }, [isOmnicient]);
 
+  // Landing
+
+  const [explorebuttonClicked, setExploreButtonClicked] = useState(false);
+
+  const closestPlanet = findClosestPlanet();
+
+  useEffect(() => {
+    // Add an event listener for the custom event
+    const exploreButtonClickHandler = () => {
+      // Do something in response to the exploreButton click
+      console.log('ExplorebuttonClicked: ', explorebuttonClicked);
+      setExploreButtonClicked(!explorebuttonClicked);
+      setIsOmnicient(true);
+    };
+  
+    const leaveButtonClickHandler = () => {
+      // Do something in response to the leave button click
+      console.log('Leave button clicked');
+      // Set the states back to their original values or perform any necessary actions
+      setExploreButtonClicked(false);
+      setIsOmnicient(false);
+    };
+  
+    document.addEventListener("exploreButtonClick", exploreButtonClickHandler);
+  
+    // Assuming you have a reference to the leave button element
+    const leaveButton = document.getElementById("leaveButton");
+  
+    if (leaveButton) {
+      leaveButton.addEventListener("click", leaveButtonClickHandler);
+    }
+  
+    // Clean up the event listeners when the component unmounts
+    return () => {
+      document.removeEventListener("exploreButtonClick", exploreButtonClickHandler);
+  
+      if (leaveButton) {
+        leaveButton.removeEventListener("click", leaveButtonClickHandler);
+      }
+    };
+  }, [explorebuttonClicked]);
+
   return (
     <>
       <OrbitControls />
@@ -83,8 +125,21 @@ function App() {
         <PerspectiveCamera makeDefault position={[-6.539644387045074
           , 7.079071754608387, -2.948639921064562]} rotation={[-1.8260317071299612, -0.6032098080001514, -2.0018962883147546]} fov={35} />
       )}
+
+      {explorebuttonClicked && (
+        <OrbitControls
+          target={closestPlanet.position}
+          enablePan={false}
+          enableZoom={true}
+          maxDistance={1.7}
+          minDistance={1}
+          autoRotate={true}
+          autoRotateSpeed={0.5}
+        />
+      )}
+
       <Float floatIntensity={0.3} speed={0.6} rotationIntensity={0.001}>
-        <Airplane isOmnicient={isOmnicient} />
+        {!explorebuttonClicked && (<Airplane isOmnicient={isOmnicient} explorebuttonClicked={explorebuttonClicked} />)}
       </Float>
       <Targets />
 
@@ -93,13 +148,13 @@ function App() {
         <meshStandardMaterial color={0xffffff} />
       </mesh>
 
-      <Planet_LittlePrince />
-      <Planet_Businessman />
-      <Planet_Drunken />
-      <Planet_Geographer />
-      <Planet_King />
-      <Planet_Lamplighter />
-      <Planet_Vanity />
+      <Planet_LittlePrince explorebuttonClicked={explorebuttonClicked} />
+      <Planet_Businessman explorebuttonClicked={explorebuttonClicked} />
+      <Planet_Drunken explorebuttonClicked={explorebuttonClicked} />
+      <Planet_Geographer explorebuttonClicked={explorebuttonClicked} />
+      <Planet_King explorebuttonClicked={explorebuttonClicked} />
+      <Planet_Lamplighter explorebuttonClicked={explorebuttonClicked} />
+      <Planet_Vanity explorebuttonClicked={explorebuttonClicked} />
 
 
       <directionalLight

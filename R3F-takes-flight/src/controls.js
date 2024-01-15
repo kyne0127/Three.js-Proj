@@ -71,7 +71,7 @@ export function updatePlaneAxis(x, y, z, planePosition, camera, planeRef) {
     x.set(1, 0, 0);
     y.set(0, 1, 0);
     z.set(0, 0, 1);
-    planePosition.set(-2.8, 0, 5.4);
+    planePosition.set(-2.7, 0, 5.4);
   }
 
   z.applyAxisAngle(y, jawVelocity);

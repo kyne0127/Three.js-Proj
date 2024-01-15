@@ -7,7 +7,7 @@ import { planePosition } from './Airplane';
 
 export const Planet_Businessman_position = new Vector3(4.8, 0, -5.5);
 
-export function Planet_Businessman(props) {
+export function Planet_Businessman({explorebuttonClicked}) {
   const groupRef = useRef();
   const {nodes, materials} = useGLTF('assets/models/little_prince_planet.glb');
   const [land, setLand] = useState(false);
@@ -35,7 +35,7 @@ export function Planet_Businessman(props) {
   return (
     <>
       <group ref={groupRef}>
-        <group {...props} dispose={null} scale = {0.1} position={[4.8, -0.1, -5.5]}>
+        <group dispose={null} scale = {0.1} position={[4.8, -0.1, -5.5]}>
           <mesh geometry={nodes.Fences.geometry} material={materials['Material.006']} />
           <mesh geometry={nodes.Clouds.geometry} material={materials['Material.001']} />
           <mesh geometry={nodes.Rose.geometry} material={materials['Material.005']} />

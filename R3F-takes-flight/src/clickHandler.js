@@ -44,13 +44,9 @@ function handleExploreButtonClick() {
     const closestPlanet = findClosestPlanet();
     if (closestPlanet) {
         // closestPlanet를 사용하여 원하는 작업 수행
-        useFrame(() => {
-            camera.position.set(0, 0, 0);
-            camera.lookAt(0, 0, 0);
-        });
         console.log(`가장 가까운 행성은 ${closestPlanet.name} 입니다.`);
         // OrbitControls를 사용하여 카메라를 해당 행성으로 이동시키는 로직을 추가할 수 있습니다.
     }
 }
 
-export { handleExploreButtonClick };
+export { findClosestPlanet, handleExploreButtonClick };
