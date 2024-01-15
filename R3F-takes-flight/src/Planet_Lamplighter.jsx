@@ -5,7 +5,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
 
-export const Planet_Lamplighter_point = new Vector3(-1.5, 3, 3.3);
+export const Planet_Lamplighter_position = new Vector3(2.1, 0, -1.8);
 
 export function Planet_Lamplighter(props) {
   const groupRef = useRef();
@@ -13,7 +13,7 @@ export function Planet_Lamplighter(props) {
   const [land, setLand] = useState(false);
 
   useFrame(() => {
-    const v = planePosition.clone().sub(Planet_Lamplighter_point);
+    const v = planePosition.clone().sub(Planet_Lamplighter_position);
     if (v.length() < 0.2) {
       setLand(true);
     } else {

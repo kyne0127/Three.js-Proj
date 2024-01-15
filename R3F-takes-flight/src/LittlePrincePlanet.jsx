@@ -5,16 +5,16 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
 
-export const littlePrincePlanetPosition = new Vector3(-1, 3, 5);
+export const Planet_LittlePrince_position = new Vector3(-3.3, 0, 5.4);
 
-export function LittlePrincePlanet(props) {
+export function Planet_LittlePrince(props) {
   const groupRef = useRef();
   const {nodes, materials} = useGLTF('assets/models/little_prince_planet.glb');
   const [land, setLand] = useState(false);
 
   useFrame(() => {
-    const v = planePosition.clone().sub(littlePrincePlanetPosition);
-    if (v.length() < 0.2) {
+    const v = planePosition.clone().sub(Planet_LittlePrince_position);
+    if (v.length() < 0.5) {
       setLand(true);
     } else {
       setLand(false);

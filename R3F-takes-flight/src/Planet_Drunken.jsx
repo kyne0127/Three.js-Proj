@@ -5,7 +5,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
 
-export const Planet_Drunken_position = new Vector3(-1.5, 3, 3.3);
+export const Planet_Drunken_position = new Vector3(5.7, 0, 0.3);
 
 export function Planet_Drunken(props) {
   const groupRef = useRef();

@@ -13,7 +13,7 @@ window.addEventListener("keyup", (e) => {
   controls[e.key.toLowerCase()] = false;
 });
 
-let maxVelocity = 1;
+let maxVelocity = 0.2888888;
 let jawVelocity = 0;
 let pitchVelocity = 0;
 let planeSpeed = 0;
@@ -37,7 +37,7 @@ export function updatePlaneAxis(x, y, z, planePosition, camera, planeRef) {
     planeSpeed = Math.sign(planeSpeed) * maxVelocity;
 
   if (controls["a"]) {
-    jawVelocity += 0.0008;
+    jawVelocity += 0.00018;
     // 현재 각도에서 목표 각도로 보간 (여기서 0.95는 보간 강도를 나타냅니다. 0에 가까울수록 천천히 변합니다.)
     planeRef.current.rotation.z = MathUtils.lerp(
       planeRef.current.rotation.z,
@@ -47,7 +47,7 @@ export function updatePlaneAxis(x, y, z, planePosition, camera, planeRef) {
   }
 
   if (controls["d"]) {
-    jawVelocity -= 0.0008;
+    jawVelocity -= 0.00018;
     // 현재 각도에서 목표 각도로 보간
     planeRef.current.rotation.z = MathUtils.lerp(
       planeRef.current.rotation.z,
@@ -57,7 +57,7 @@ export function updatePlaneAxis(x, y, z, planePosition, camera, planeRef) {
   }
 
   if (controls["w"]) {
-    planeSpeed -= 0.0008;
+    planeSpeed -= 0.00018;
   }
 
   if (controls["s"]) {

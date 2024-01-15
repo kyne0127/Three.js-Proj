@@ -50,8 +50,8 @@ export function Airplane({isOmnicient}) {
     delayedRotMatrix.identity();
     delayedRotMatrix.makeRotationFromQuaternion(delayedQuaternion);
 
-    console.log(camera.position);
-    console.log(camera.rotation);
+    // console.log(camera.position);
+    // console.log(camera.rotation);
 
     if (!isOmnicient) {
       console.log('view updated; isOmnicient:', isOmnicient);

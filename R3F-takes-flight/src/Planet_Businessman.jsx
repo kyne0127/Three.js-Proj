@@ -5,7 +5,7 @@ import { Matrix4, Quaternion, Vector3 } from 'three';
 import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
 
-export const Planet_Businessman_position = new Vector3(-1.5, 3, 3.3);
+export const Planet_Businessman_position = new Vector3(4.8, 0, -5.5);
 
 export function Planet_Businessman(props) {
   const groupRef = useRef();

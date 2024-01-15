@@ -19,7 +19,7 @@ export function Targets() {
     const arr = [];
     for (let i = 0; i < 200; i++) {
       arr.push({
-        center: randomPoint(new Vector3(40, 40, 40)),
+        center: randomPoint(new Vector3(20, 20, 20)),
         direction: randomPoint().normalize(),
       });
     }
