@@ -10,10 +10,11 @@ import GUI from 'lil-gui';
 export const Planet_King_position = new Vector3(0.45, 0, 3.9);
 const Planet_King_center = new Vector3(0.45, 0, -1.35);
 const planetRadius = 1.7;
+var gui = null;
 
-export function Planet_King({explorebuttonClicked}) {
+export function Planet_King({ explorebuttonClicked }) {
   const groupRef = useRef();
-  const {nodes, materials} = useGLTF('assets/models/king_planet.glb');
+  const { nodes, materials } = useGLTF('assets/models/king_planet.glb');
   const { nodes: textNodes, materials: textMaterials } = useGLTF('assets/models/king_planet_text.glb'); // 'nodes' 및 'materials' 객체를 분리하여 가져옵니다.
 
   const [land, setLand] = useState(false);
@@ -24,18 +25,25 @@ export function Planet_King({explorebuttonClicked}) {
 
   useEffect(() => {
     if (land) {
-      const gui = new GUI();
-      
+      gui = new GUI();
+      console.log(gui);
+
       const mouseNumber = {
         mouse_number: 0
       };
-  
+
       gui.add(mouseNumber, 'mouse_number')
         .min(0)
         .max(10)
         .step(1)
-        .name("mouse count")
+        .name("mouse counfet")
         .onChange((value) => setMouseCount(value));
+    } else if (land == false) {
+      console.log(gui);
+      if (gui) {
+        console.log("on");
+        gui.destroy();
+      }
     }
   }, [land]);
 
@@ -47,7 +55,7 @@ export function Planet_King({explorebuttonClicked}) {
     } else {
       setLand(false);
     }
-    const newMousePositions = mousePositions.map((mouse) => {
+    const newMousePositions = mousePositions.map((mouse) => {   
       const { position, latitude, longitude } = mouse;
 
       // 쥐의 현재 위치와 각도
@@ -91,15 +99,15 @@ export function Planet_King({explorebuttonClicked}) {
     console.log('little_prince', explorebuttonClicked);
     if (exploreButton) {
       if (land) {
-        if (!explorebuttonClicked){
+        if (!explorebuttonClicked) {
           exploreButton.style.display = 'block'; // 랜딩 상태일 때 이미지 표시
           leaveButton.style.display = 'none';
         }
-        else{
+        else {
           exploreButton.style.display = 'none';
           leaveButton.style.display = 'block';
         }
-      } else{
+      } else {
         if (findClosestPlanet().position == Planet_King_position && !explorebuttonClicked) {
           exploreButton.style.display = 'none';
           leaveButton.style.display = 'none';
@@ -108,50 +116,50 @@ export function Planet_King({explorebuttonClicked}) {
     }
   }, [land, explorebuttonClicked]);
 
-    // 생쥐 초기 위치 및 방향 설정
-    useEffect(() => {
-      const newMousePositions = [];
-      for (let i = 0; i < mouseCount; i++) {
-        const randomPhi = Math.random() * Math.PI * 2; // 랜덤한 경도
-        const randomTheta = Math.random() * Math.PI; // 랜덤한 위도
-        const x = Planet_King_center.x + planetRadius * Math.cos(randomPhi);
-        const y = Planet_King_center.y + planetRadius * Math.sin(randomTheta);
-        const z = Planet_King_center.z + planetRadius * Math.sin(randomPhi);
-        newMousePositions.push({
-          position: new Vector3(x, y, z),
-          latitude: randomTheta,
-          longitude: randomPhi,
-        });
-      }
-      setMousePositions(newMousePositions);
-    }, [mouseCount]);
-
-    function handleGroupClick(event) {
-      if (land) {
-        // 텍스트 표시 상태를 토글
-        setShowText(true);
-
-        // 텍스트를 표시한 뒤, 5초 후에 숨김
-        setTimeout(() => {
-          setShowText(false);
-        }, 3000);
-      }
+  // 생쥐 초기 위치 및 방향 설정
+  useEffect(() => {
+    const newMousePositions = [];
+    for (let i = 0; i < mouseCount; i++) {
+      const randomPhi = Math.random() * Math.PI * 2; // 랜덤한 경도
+      const randomTheta = Math.random() * Math.PI; // 랜덤한 위도
+      const x = Planet_King_center.x + planetRadius * Math.cos(randomPhi);
+      const y = Planet_King_center.y + planetRadius * Math.sin(randomTheta);
+      const z = Planet_King_center.z + planetRadius * Math.sin(randomPhi);
+      newMousePositions.push({
+        position: new Vector3(x, y, z),
+        latitude: randomTheta,
+        longitude: randomPhi,
+      });
     }
+    setMousePositions(newMousePositions);
+  }, [mouseCount]);
 
-    const textFadeStyle = {
-      opacity: showText ? 1 : 0,
-      transition: 'opacity 1s ease-in-out'
-    };
+  function handleGroupClick(event) {
+    if (land) {
+      // 텍스트 표시 상태를 토글
+      setShowText(true);
+
+      // 텍스트를 표시한 뒤, 5초 후에 숨김
+      setTimeout(() => {
+        setShowText(false);
+      }, 3000);
+    }
+  }
+
+  const textFadeStyle = {
+    opacity: showText ? 1 : 0,
+    transition: 'opacity 1s ease-in-out'
+  };
 
   return (
     <>
       <group ref={groupRef} onClick={handleGroupClick}>
-        <group dispose={null} scale = {0.1} position={[0.45, -0.4, 3.9]}>
+        <group dispose={null} scale={0.1} position={[0.45, -0.4, 3.9]}>
           <mesh geometry={nodes.body.geometry} material={materials['Material']} />
           <mesh geometry={nodes.Chair.geometry} material={materials['UV1304']} />
           <mesh geometry={nodes.Chair_back.geometry} material={materials['UV1305']} />
           <mesh geometry={nodes.Cloak.geometry} material={materials['King']} />
-          <mesh geometry={nodes.Crown.geometry} material={materials['Material.005']}/>
+          <mesh geometry={nodes.Crown.geometry} material={materials['Material.005']} />
           <mesh geometry={nodes.Eyebrow.geometry} material={materials['Material.001']} />
           <mesh geometry={nodes.Eyes.geometry} material={materials['Material.002']} />
           <mesh geometry={nodes.Hair.geometry} material={materials['Material.001']} />
