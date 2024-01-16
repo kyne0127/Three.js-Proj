@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
-import { Matrix4, Quaternion, Vector3 } from 'three';
-import { updatePlaneAxis } from './controls';
+import { Vector3 } from 'three';
 import { planePosition } from './Airplane';
 import { findClosestPlanet } from "./clickHandler";
 
-export const Planet_Vanity_position = new Vector3(3.15, 0, 2.4);
+export const Planet_Vanity_position = new Vector3(3.15, 0.1, 2.4);
 
 export function Planet_Vanity({explorebuttonClicked}) {
   const groupRef = useRef();
@@ -19,7 +18,7 @@ export function Planet_Vanity({explorebuttonClicked}) {
 
   useFrame(() => {
     const v = planePosition.clone().sub(Planet_Vanity_position);
-    if (v.length() < 0.2) {
+    if (v.length() < 0.4) {
       setLand(true);
     } else {
       setLand(false);
@@ -65,7 +64,7 @@ export function Planet_Vanity({explorebuttonClicked}) {
   return (
     <>
       <group ref={groupRef} onClick={handleGroupClick}>
-        <group dispose={null} scale = {0.2} position={[3.15, -0.08, 2.4]}>
+        <group dispose={null} scale = {0.2} position={[3.15, -0.1, 2.4]}>
           <mesh geometry={nodes.body.geometry} material={materials['mat0.005']} />
           <mesh geometry={nodes.Eyebrow.geometry} material={materials['PEARL-GOLD']} />
           <mesh geometry={nodes.Eyes.geometry} material={materials['Material']} />
@@ -76,10 +75,11 @@ export function Planet_Vanity({explorebuttonClicked}) {
           <mesh geometry={nodes.Hat.geometry} material={materials['mat0.005']} />
           <mesh geometry={nodes.Pants.geometry} material={materials['mat0.002']} />
           <mesh geometry={nodes.Shoes.geometry} material={materials['mat0.004']} />
-          <mesh geometry={nodes.Sphere.geometry} material={materials['Material.004']} />
+          <mesh geometry={nodes.Planet.geometry} material={materials['lambert1']} />
+          <mesh geometry={nodes.Planetring.geometry} material={materials['lambert4']} />
         </group>
         {showText && (
-          <group scale={0.03} position={[3.15, -0.08, 2.6]} rotation-x={Math.PI / 2}>
+          <group scale={0.06} position={[3.15, -0.08, 2.6]} rotation-x={Math.PI / 2}>
             <mesh geometry={textNodes.Text.geometry} />
           </group>
         )}

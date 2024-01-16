@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
-import { Matrix4, Quaternion, Vector3 } from 'three';
-import { updatePlaneAxis } from './controls';
+import { Vector3 } from 'three';
 import { planePosition } from './Airplane';
 import { findClosestPlanet } from "./clickHandler";
 

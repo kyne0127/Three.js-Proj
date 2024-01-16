@@ -49,7 +49,7 @@ export function Planet_Geographer({explorebuttonClicked}) {
   return (
     <>
       <group ref={groupRef}>
-        <group dispose={null} scale = {0.1} position={[-0.3, -0.1, 1.65]}>
+        <group dispose={null} scale = {0.01} position={[-0.3, -0.1, 1.65]}>
           <mesh geometry={nodes.Beard.geometry} material={materials['Material']} />
           <mesh geometry={nodes.Belt.geometry} material={materials['Material.003']} />
           <mesh geometry={nodes.Body.geometry} material={materials['Material.004']} />
