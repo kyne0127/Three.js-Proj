@@ -10,7 +10,6 @@ export const Planet_King_position = new Vector3(0.45, 0, 3.9);
 const Planet_King_center = new Vector3(0.45, 0, -1.35);
 const planetRadius = 1.7;
 var gui = null;
-var gui = null;
 
 export function Planet_King({ explorebuttonClicked }) {
   const groupRef = useRef();
