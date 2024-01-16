@@ -13,6 +13,7 @@ import { Planet_Lamplighter } from "./Planet_Lamplighter";
 import { Planet_Vanity } from "./Planet_Vanity";
 import { Planet_LittlePrince } from "./LittlePrincePlanet";
 import { findClosestPlanet } from "./clickHandler";
+import { Planet_Geographer_position } from "./Planet_Geographer";
 
 const LINE_NB_POINTS = 100;
 
@@ -131,8 +132,8 @@ function App() {
           target={closestPlanet.position}
           enablePan={false}
           enableZoom={true}
-          maxDistance={1.7}
-          minDistance={1}
+          maxDistance={(closestPlanet.position == Planet_Geographer_position) ? 4.5 : 1.7}
+          minDistance={(closestPlanet.position == Planet_Geographer_position) ? 3 : 1}
           autoRotate={true}
           autoRotateSpeed={0.5}
         />
