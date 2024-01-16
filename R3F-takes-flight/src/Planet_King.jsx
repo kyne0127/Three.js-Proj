@@ -146,11 +146,6 @@ export function Planet_King({explorebuttonClicked}) {
       }
     }
 
-    const textFadeStyle = {
-      opacity: showText ? 1 : 0,
-      transition: 'opacity 1s ease-in-out'
-    };
-
   return (
     <>
       <group ref={groupRef} onClick={handleGroupClick}>
@@ -177,7 +172,7 @@ export function Planet_King({explorebuttonClicked}) {
           ))}
         </group>
         {showText && (
-          <group scale={0.03} position={[0.05, -0.93, 4.1]} rotation-x={Math.PI / 2} style={textFadeStyle}>
+          <group scale={0.03} position={[0.05, -0.93, 4.1]} rotation-x={Math.PI / 2}>
             <mesh geometry={textNodes.Text.geometry} />
           </group>
         )}
