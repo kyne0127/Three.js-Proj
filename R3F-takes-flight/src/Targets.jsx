@@ -1,8 +1,6 @@
 import { useState, useMemo } from "react";
 import { Mesh, SphereGeometry, MeshStandardMaterial, Vector3 } from "three";
 import { mergeBufferGeometries } from "three-stdlib";
-import { useFrame } from "@react-three/fiber";
-import { planePosition } from "./Airplane";
 
 function randomPoint(scale) {
   return new Vector3(

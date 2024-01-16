@@ -10,6 +10,7 @@ import GUI from 'lil-gui';
 export const Planet_Vanity_position = new Vector3(3.15, 0.1, 2.4);
 var gui = null;
 
+
 export function Planet_Vanity({explorebuttonClicked}) {
   const groupRef = useRef();
   const {nodes, materials} = useGLTF('assets/models/vanity_planet.glb');

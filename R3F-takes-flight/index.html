@@ -33,13 +33,13 @@
     // Dispatch a custom event to notify App.jsx about the button click
     const exploreButtonClickEvent = new Event("exploreButtonClick");
     document.dispatchEvent(exploreButtonClickEvent);
-  });
+  }, { passive: true });
     
     document.getElementById("exploreButton").addEventListener("click", () => {
       
       const leaveButtonClickEvent = new Event("leaveButtonClick");
       document.dispatchEvent(leaveButtonClickEvent);
-  });  
+  }, { passive: true });  
 
   </script>
 </body>
