@@ -75,5 +75,5 @@ export function Planet_Geographer({explorebuttonClicked}) {
   );
 }
 
-useGLTF.preload('assets/models/little_prince_planet.glb');
+useGLTF.preload('assets/models/geographer_planet.glb');
 
