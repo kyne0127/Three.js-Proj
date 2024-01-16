@@ -35,7 +35,6 @@ export function Planet_Vanity({explorebuttonClicked}) {
       gui.add(fireworks, 'moreFireworks')
         .name("Praise Me")
     } else if (land == false) {
-      console.log(gui);
       if (gui) {
         gui.destroy();
       }
@@ -122,7 +121,6 @@ export function Planet_Vanity({explorebuttonClicked}) {
     const exploreButton = document.getElementById('exploreButton');
     const leaveButton = document.getElementById('leaveButton');
 
-    console.log('little_prince', explorebuttonClicked);
     if (exploreButton) {
       if (land) {
         if (!explorebuttonClicked){
