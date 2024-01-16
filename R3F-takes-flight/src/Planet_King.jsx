@@ -11,6 +11,7 @@ export const Planet_King_position = new Vector3(0.45, 0, 3.9);
 const Planet_King_center = new Vector3(0.45, 0, -1.35);
 const planetRadius = 1.7;
 var gui = null;
+var gui = null;
 
 export function Planet_King({ explorebuttonClicked }) {
   const groupRef = useRef();
@@ -27,7 +28,7 @@ export function Planet_King({ explorebuttonClicked }) {
     if (land) {
       gui = new GUI();
       console.log(gui);
-
+      
       const mouseNumber = {
         mouse_number: 0
       };
@@ -37,7 +38,14 @@ export function Planet_King({ explorebuttonClicked }) {
         .max(10)
         .step(1)
         .name("mouse counfet")
+        .name("mouse counfet")
         .onChange((value) => setMouseCount(value));
+    } else if (land == false) {
+      console.log(gui);
+      if (gui) {
+        console.log("on");
+        gui.destroy();
+      }
     } else if (land == false) {
       console.log(gui);
       if (gui) {
@@ -177,7 +185,7 @@ export function Planet_King({ explorebuttonClicked }) {
           ))}
         </group>
         {showText && (
-          <group scale={0.03} position={[0.05, -0.93, 4.1]} rotation-x={Math.PI / 2} style={textFadeStyle}>
+          <group scale={0.03} position={[0.05, -0.93, 4.1]} rotation-x={Math.PI / 2}>
             <mesh geometry={textNodes.Text.geometry} />
           </group>
         )}
