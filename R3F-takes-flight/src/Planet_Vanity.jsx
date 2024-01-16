@@ -1,11 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
-import { Vector3 } from 'three';
+import { Matrix4, Quaternion, Vector3, Group, TextureLoader, Color, SpriteMaterial, Sprite, AdditiveBlending } from 'three';
+import { updatePlaneAxis } from './controls';
 import { planePosition } from './Airplane';
 import { findClosestPlanet } from "./clickHandler";
+import GUI from 'lil-gui';
 
 export const Planet_Vanity_position = new Vector3(3.15, 0.1, 2.4);
+var gui = null;
+
 
 export function Planet_Vanity({explorebuttonClicked}) {
   const groupRef = useRef();
@@ -15,13 +19,104 @@ export function Planet_Vanity({explorebuttonClicked}) {
   const [land, setLand] = useState(false);
   const [showText, setShowText] = useState(false); // 텍스트 표시 여부를 상태로 관리
 
+  //폭죽
+  let explosions = [];
+
+  useEffect(() => {
+    if (land) {
+      gui = new GUI();
+      
+      const fireworks = {
+        moreFireworks: () => {
+          let e = new Explosion;
+          e.makeParticles();
+          explosions.push(e);
+        }
+      }; 
+      gui.add(fireworks, 'moreFireworks')
+        .name("Praise Me")
+    } else if (land == false) {
+      console.log(gui);
+      if (gui) {
+        gui.destroy();
+      }
+    }
+  }, [land]);
+
+  function Explosion() {
+    //random properties of each explosions
+    this.particleGroup = new Group();
+    this.explosion = false;
+    this.particleTexture = new TextureLoader().load("assets/textures/spot.png");
+    this.numberParticles = Math.random() * 200 + 100;
+    this.spd = 0.01;
+    this.color = new Color();
+
+    this.makeParticles = function() {
+
+      this.color.setHSL((Math.random()), 0.95, 0.5);
+
+      for (let i = 0; i < this.numberParticles; i++) {
+
+        let particleMaterial = new SpriteMaterial({map: this.particleTexture, depthTest: false});
+        let sprite = new Sprite(particleMaterial);
+        sprite.material.blending = AdditiveBlending;
+
+        //particle velocity
+        sprite.userData.velocity = new Vector3(
+          Math.random() * this.spd - this.spd/2,
+          Math.random() * this.spd - this.spd/2,
+          Math.random() * this.spd - this.spd/2
+        );
+        console.log("update");
+
+        sprite.userData.velocity.multiplyScalar(Math.random() * Math.random() * 3 + 2); //spread particles out
+
+        //particle color
+        sprite.material.color = this.color;
+
+        //particle opacity
+        sprite.material.opacity = Math.random() * 0.2 + 0.4;
+
+        //particle size
+        let size = Math.random() * 0.01 + 0.01;
+        sprite.scale.set(size, size, size);
+
+        this.particleGroup.add(sprite);
+
+      }
+
+      this.particleGroup.position.set(Math.random() - 0.5 + 3.15, Math.random() * 0.5 + 0.1, Math.random() * 0.5 - 0.25 + 2.4);
+      groupRef.current.attach(this.particleGroup);
+      this.explosion = true;
+    }
+
+    this.update = function () {
+
+      this.particleGroup.children.forEach((child) => {
+        child.position.add(child.userData.velocity);
+        child.material.opacity -= 0.008;
+      });
+
+      this.particleGroup.children = this.particleGroup.children.filter((child) => child.material.opacity > 0);
+      if (this.particleGroup.children.length === 0) {
+        this.explosion = false;
+      }
+
+      explosions = explosions.filter((exp) => exp.explosion);
+    }
+  }
+
 
   useFrame(() => {
     const v = planePosition.clone().sub(Planet_Vanity_position);
-    if (v.length() < 0.4) {
+    if (v.length() < 0.6) {
       setLand(true);
     } else {
       setLand(false);
+    }
+    if (explosions.length > 0) {
+      explosions.forEach((e) => e.update());
     }
   });
 
@@ -64,7 +159,7 @@ export function Planet_Vanity({explorebuttonClicked}) {
   return (
     <>
       <group ref={groupRef} onClick={handleGroupClick}>
-        <group dispose={null} scale = {0.2} position={[3.15, -0.1, 2.4]}>
+        <group dispose={null} scale = {0.2} position={[3.15, 0.1, 2.4]}>
           <mesh geometry={nodes.body.geometry} material={materials['mat0.005']} />
           <mesh geometry={nodes.Eyebrow.geometry} material={materials['PEARL-GOLD']} />
           <mesh geometry={nodes.Eyes.geometry} material={materials['Material']} />

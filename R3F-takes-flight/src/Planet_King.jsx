@@ -26,7 +26,6 @@ export function Planet_King({ explorebuttonClicked }) {
   useEffect(() => {
     if (land) {
       gui = new GUI();
-      console.log(gui);
       
       const mouseNumber = {
         mouse_number: 0
@@ -40,9 +39,7 @@ export function Planet_King({ explorebuttonClicked }) {
         .name("mouse counfet")
         .onChange((value) => setMouseCount(value));
     } else if (land == false) {
-      console.log(gui);
       if (gui) {
-        console.log("on");
         gui.destroy();
       }
     } else if (land == false) {
