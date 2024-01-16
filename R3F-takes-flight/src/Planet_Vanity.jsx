@@ -9,6 +9,7 @@ import GUI from 'lil-gui';
 
 export const Planet_Vanity_position = new Vector3(3.15, 0.1, 2.4);
 var gui = null;
+var explosions = [];
 
 
 export function Planet_Vanity({explorebuttonClicked}) {
@@ -20,8 +21,6 @@ export function Planet_Vanity({explorebuttonClicked}) {
   const [showText, setShowText] = useState(false); // 텍스트 표시 여부를 상태로 관리
 
   //폭죽
-  let explosions = [];
-
   useEffect(() => {
     if (land) {
       gui = new GUI();
@@ -68,7 +67,6 @@ export function Planet_Vanity({explorebuttonClicked}) {
           Math.random() * this.spd - this.spd/2,
           Math.random() * this.spd - this.spd/2
         );
-        console.log("update");
 
         sprite.userData.velocity.multiplyScalar(Math.random() * Math.random() * 3 + 2); //spread particles out
 
@@ -174,7 +172,7 @@ export function Planet_Vanity({explorebuttonClicked}) {
           <mesh geometry={nodes.Planetring.geometry} material={materials['lambert4']} />
         </group>
         {showText && (
-          <group scale={0.06} position={[3.15, -0.08, 2.6]} rotation-x={Math.PI / 2}>
+          <group scale={0.06} position={[5.7, 0.03, 0.3]} rotation-x={Math.PI / 2}>
             <mesh geometry={textNodes.Text.geometry} />
           </group>
         )}
@@ -183,6 +181,6 @@ export function Planet_Vanity({explorebuttonClicked}) {
   );
 }
 
-useGLTF.preload('assets/models/little_prince_planet.glb');
+useGLTF.preload('assets/models/vanity_planet.glb');
 useGLTF.preload('assets/models/vanity_planet_text.glb');
 
