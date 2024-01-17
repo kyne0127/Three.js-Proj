@@ -61,7 +61,7 @@ export function Planet_Lamplighter({explorebuttonClicked}) {
 
   useFrame(() => {
     const v = planePosition.clone().sub(Planet_Lamplighter_position);
-    if (v.length() < 0.2) {
+    if (v.length() < 0.3) {
       setLand(true);
     } else {
       setLand(false);
@@ -137,7 +137,7 @@ export function Planet_Lamplighter({explorebuttonClicked}) {
           <mesh geometry={nodes.Tree_Root_0.geometry} material={materials['Tree_Trunk']} />
         </group>
         {showText && (
-          <group scale={0.5} position={[0, 0.03, 2.1]} rotation-x={Math.PI / 2}>
+          <group scale={0.05} position={[2.1, 0, -1.685]} rotation-x={Math.PI / 2}>
             <mesh geometry={textNodes.Text.geometry} />
           </group>
         )}
