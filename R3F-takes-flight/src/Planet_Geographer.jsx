@@ -1,13 +1,17 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { MeshTransmissionMaterial, useGLTF, useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
-import { Vector3, DoubleSide } from 'three';
+import { Vector3, DoubleSide, Color, SphereGeometry, MeshBasicMaterial, Mesh, Group } from 'three';
 import { planePosition } from './Airplane';
 import { findClosestPlanet } from "./clickHandler";
 import { NodeToyMaterial } from "@nodetoy/react-nodetoy";
 import { data } from "./meteor_shader";
+import GUI from 'lil-gui';
 
 export const Planet_Geographer_position = new Vector3(-0.3, 0, 1.65);
+var gui = null;
+var particles = [];
+
 
 export function Planet_Geographer({ explorebuttonClicked }) {
   const groupRef = useRef();
@@ -27,12 +31,99 @@ export function Planet_Geographer({ explorebuttonClicked }) {
     nodes.beam6.geometry,
   ];
 
+  const [fountainHeight, setFountainHeight] = useState(0.1);
+  const [xVelocityRange, setXVelocityRange] = useState(0.01);
+  const [zVelocityRange, setZVelocityRange] = useState(0.01);
+  const [particleCount, setParticleCount] = useState(2000);
+  const [yVelocityRange, setYVelocityRange] = useState({ min: -0.1, max: -0.01 });
+  const [particleRadiusRange, setParticleRadiusRange] = useState({ min: 0.001, max: 0.01 });
+
+  useEffect(() => {
+    if (land) {
+      gui = new GUI();
+      // Add GUI controls here
+      // gui.add(fountainHeight, 'Fountain Height', 1, 10, 0.25).onChange((value) => {
+      //   setFountainHeight(value);
+      //   particles.current.forEach((particle) => (particle.position.y = 0)); // Reset particle positions when changing fountain height
+      // });
+      // gui.add(xVelocityRange, 'X Velocity Range', 0.1, 1, 0.1).onChange(setXVelocityRange);
+      // gui.add(zVelocityRange, 'Z Velocity Range', 0.1, 1, 0.1).onChange(setZVelocityRange);
+      const fountain = {
+        moreFountain: () => {
+          let f = new Fountain();
+          f.createParticles();
+          particles.push(f);
+        }
+      };
+      gui.add(fountain, 'moreFountain')
+        .name("explode!");
+      // gui.add(yVelocityRange.max, 'Y Velocity Range', 0.1, 5, 0.1).onChange((value) => setYVelocityRange({ ...yVelocityRange, max: value }));
+      // gui.add(particleRadiusRange.max, 'Particle Radius Range', 0.1, 1, 0.1).onChange((value) => setParticleRadiusRange({ ...particleRadiusRange, max: value }));
+
+      
+    } else if (land == false) {
+      if (gui) {
+        gui.destroy();
+      }
+    }
+  }, [land]);
+  
+
+  function Fountain() {
+    this.particleGroup = new Group();
+    this.explosion = false;
+  
+    this.createParticles = function () {
+      const colorStart = new Color(0xffff00); // Yellow
+      const colorEnd = new Color(0xffa500); // Orange
+  
+      for (let i = 0; i < particleCount; i++) {
+        const radius = Math.random() * (particleRadiusRange.max - particleRadiusRange.min) + particleRadiusRange.min;
+        const geo = new SphereGeometry(radius);
+        const mat = new MeshBasicMaterial({ color: colorStart.clone().lerp(colorEnd, Math.random()) });
+        const particle = new Mesh(geo, mat);
+        particle.position.set(
+          Math.random() * 0.1 - 2, // X 좌표 범위 내에서 랜덤
+          Math.random() * 0.1 - 0.2, // Y 좌표 범위 내에서 랜덤
+          Math.random() * 0.1 + 1.5  // Z 좌표 범위 내에서 랜덤
+        );
+        particle.userData.velocity = new Vector3(
+          Math.random() * (yVelocityRange.max - yVelocityRange.min) + yVelocityRange.min,
+          Math.random() * xVelocityRange - xVelocityRange / 2,
+          Math.random() * zVelocityRange - zVelocityRange / 2
+        );
+
+        this.particleGroup.add(particle);
+      }
+        groupRef.current.attach(this.particleGroup);
+        this.explosion = true;
+    }
+
+    this.updateParticles = function () {
+      
+      this.particleGroup.children.forEach((child) => {
+        child.userData.velocity.y -= 0.01 + Math.random() * 0.01;
+        child.position.add(child.userData.velocity);
+      })
+
+      this.particleGroup.children = this.particleGroup.children.filter((child) => child.position.y > -fountainHeight);
+      if (this.particleGroup.children.length === 0) {
+        this.explosion = false;
+      }
+
+      particles = particles.filter((exp) => exp.explosion);
+    }
+  }
+
   useFrame(() => {
     const v = planePosition.clone().sub(Planet_Geographer_position);
     if (v.length() < 1.5) {
       setLand(true);
     } else {
       setLand(false);
+    }
+    if (particles.length > 0) {
+      particles.forEach((f) => f.updateParticles());
     }
   });
 
