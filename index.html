@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flying with three js</title>
+  <title>Le Petit Prince</title>
   <style>
     @keyframes fadeOut {
       from {
@@ -19,7 +19,7 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="./assets/index-37109411.js"></script>
+  <script type="module" crossorigin src="./assets/index-5e697dc3.js"></script>
   <link rel="stylesheet" href="./assets/index-bf53c341.css">
 </head>
 
@@ -38,12 +38,23 @@
   
   
     <script>
-      var preloader = document.getElementById('loader');
-      var instruction = document.getElementById('instructionImage');
-      function preLoaderHandler(){
-          preloader.style.display = 'none';
-          instruction.style.display = 'block';
-      }
+      document.addEventListener('DOMContentLoaded', function () {
+        // Assuming preloader and instruction are elements fetched from the DOM
+        var preloader = document.getElementById('loader');
+        var instruction = document.getElementById('instructionImage');
+
+        // Hide instruction initially
+        instruction.style.display = 'none';
+
+        // Add a load event listener to the preloader image
+        preloader.addEventListener('load', preLoaderHandler);
+
+        function preLoaderHandler() {
+            // This function will be called when the preloader image has finished loading
+            preloader.style.display = 'none';
+            instruction.style.display = 'block';
+        }
+    });
     </script>
 </body>
 
