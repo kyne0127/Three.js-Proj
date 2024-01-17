@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { MeshTransmissionMaterial, useGLTF, useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber';
-import { Vector3, PointLight, SphereGeometry, MeshBasicMaterial, Mesh } from 'three';
+import { Vector3, PointLight, SphereGeometry, MeshBasicMaterial, Mesh, Color } from 'three';
 import { planePosition } from './Airplane';
 import { findClosestPlanet } from "./clickHandler";
 import GUI from 'lil-gui';
@@ -20,10 +20,11 @@ export function Planet_Lamplighter({explorebuttonClicked}) {
   const [showText, setShowText] = useState(false); // 텍스트 표시 여부를 상태로 관리
   const [land, setLand] = useState(false);
   const [lightIntensity, setLightIntensity] = useState(1.0);
+  const [lightColor, setLightColor] = useState(new Color(0xf6ff00));
 
   const [normalMap] = useTexture(["assets/textures/meteor_normals.png"]);
 
-  const light = new PointLight(0xfffd7a, 1, 100);
+  const light = new PointLight(lightColor, 1, 100);
   light.position.set(2.068, 0.083, -1.652);
 
   // 구 형태의 메쉬 생성
@@ -46,6 +47,11 @@ export function Planet_Lamplighter({explorebuttonClicked}) {
           // intensity 값이 변경될 때 상태 업데이트
           setLightIntensity(value);
         });
+      gui.addColor(light, 'color')
+        .name("color")
+        .onChange((value) => {
+          setLightColor(value);
+        })
     } else if (land == false) {
       if (gui) {
         gui.destroy();
@@ -90,9 +96,13 @@ export function Planet_Lamplighter({explorebuttonClicked}) {
   useEffect(() => {
     if (lightMeshRef.current) {
       lightMeshRef.current.children[0].intensity = lightIntensity;
-      console.log(lightIntensity);
     }
   }, [lightIntensity]);
+  useEffect(() => {
+    if (lightMeshRef.current) {
+      lightMeshRef.current.children[0].color = lightColor;
+    }
+  }, [lightColor]);
 
   function handleGroupClick(event) {
     if (land) {
