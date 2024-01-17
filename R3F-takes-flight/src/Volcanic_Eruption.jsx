@@ -48,15 +48,6 @@ const Fountain = () => {
     }
   };
 
-  useEffect(() => {
-    createParticles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useFrame(() => {
-    updateParticles();
-  });
-
   useGui((gui) => {
     // Add GUI controls here
     gui.addSlider(fountainHeight, 'Fountain Height', 1, 10, 0.25).onChange((value) => {
@@ -74,8 +65,6 @@ const Fountain = () => {
     gui.addSlider(yVelocityRange.max, 'Y Velocity Range', 0.1, 5, 0.1).onChange((value) => setYVelocityRange({ ...yVelocityRange, max: value }));
     gui.addSlider(particleRadiusRange.max, 'Particle Radius Range', 0.1, 1, 0.1).onChange((value) => setParticleRadiusRange({ ...particleRadiusRange, max: value }));
   });
-
-  return null; // Render nothing in the JSX since the scene is managed by three-fiber
 };
 
 export default Fountain;

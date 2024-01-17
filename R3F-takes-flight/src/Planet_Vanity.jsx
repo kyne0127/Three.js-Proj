@@ -33,7 +33,7 @@ export function Planet_Vanity({explorebuttonClicked}) {
         }
       }; 
       gui.add(fireworks, 'moreFireworks')
-        .name("Praise Me")
+        .name("Praise Me");
     } else if (land == false) {
       if (gui) {
         gui.destroy();
