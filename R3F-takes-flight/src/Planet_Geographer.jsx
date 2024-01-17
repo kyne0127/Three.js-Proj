@@ -40,7 +40,6 @@ export function Planet_Geographer({ explorebuttonClicked }) {
     const exploreButton = document.getElementById('exploreButton');
     const leaveButton = document.getElementById('leaveButton');
 
-    console.log('little_prince', explorebuttonClicked);
     if (exploreButton) {
       if (land) {
         if (!explorebuttonClicked) {
