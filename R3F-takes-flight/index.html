@@ -22,8 +22,12 @@
 </head>
 
 <body>
+  <div id="loader">
+    <img src="/src/images/loadingGIF.gif" alt="Loading..." 
+      style="position: fixed; width: 100vw; height: 100vh;"/>
+  </div>
   <img id="instructionImage" src="/src/images/instructionImage.png" alt="Instruction Image"
-    style="position: fixed; padding: 10vh; height: 30vh; right: 0; bottom: 0; z-index: 10; animation: fadeOut 3s ease-in-out 12s forwards;" />
+    style="position: fixed; padding: 10vh; height: 30vh; right: 0; bottom: 0; z-index: 10; animation: fadeOut 3s ease-in-out 3s forwards; display: none;" />
   <img id="exploreButton" src="/src/images/land.png" alt="Explore Button"
     style="position: fixed; margin-bottom: 20vh; height: 10vh; bottom: 0; z-index: 10; display: none; left: 50%; transform: translateX(-50%);" />
   <div id="root"></div>
@@ -44,6 +48,14 @@
   }, { passive: true });  
 
   </script>
+    <script>
+      var preloader = document.getElementById('loader');
+      var instruction = document.getElementById('instructionImage');
+      function preLoaderHandler(){
+          preloader.style.display = 'none';
+          instruction.style.display = 'block';
+      }
+    </script>
 </body>
 
 </html>
