@@ -99,6 +99,8 @@ export function Planet_Geographer({ explorebuttonClicked }) {
           >
             <NodeToyMaterial data={data} />
           </mesh>
+          <mesh geometry={nodes.lava.geometry} material={materials['Lava']} />
+          <mesh geometry={nodes.lava2.geometry} material={materials['Lava']} />
           <mesh geometry={nodes.Lantern.geometry} material={materials['lantern_mtl']} />
           <mesh geometry={nodes.LavaPlanet.geometry} material={materials['DefaultMaterial']} />
           <mesh geometry={nodes.Outer.geometry} material={materials['Material.007']} />

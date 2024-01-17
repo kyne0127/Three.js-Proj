@@ -1,0 +1,387 @@
+<!--////////////////////////////////////////////////////////////////////////////////////////
+///                                                                                      ///
+///  Example Using Three.js Library, HTML, CSS & JavaScript                              ///
+//   3D Interactive Web Apps & Games   2021-2023                                         ///
+///  Contact Shane Brumback https://www.shanebrumback.com                                ///
+///  Send a message if you have questions about this code                                ///
+///  I am a freelance developer. I develop any and all web.                              ///
+///  Apps Websites 3D 2D CMS Systems etc. Contact me anytime :)                          ///
+///                                                                                      ///
+////////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Three.js Examples - How to Program a Fire Fountain Particle System</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <style>
+
+        #ui-container {
+            color: white;
+            font-family: Arial, sans-serif;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ui-container "></div>
+
+    <!-- Include Three.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/three@latest/build/three.min.js"></script>
+
+    <!-- Include OrbitControls module -->
+    <script src="https://cdn.jsdelivr.net/npm/three@latest/examples/js/controls/OrbitControls.js"></script>
+
+    <script type="module">
+
+        // Declare variables for scene, camera, renderer, and controls
+        let scene, camera, renderer, controls;
+        let particles = [];
+
+        let fountainHeight = 50; // Initial height of the fountain
+        let resetHeight = 0; // Height at which particles will reset to the center
+        let xVelocityRange = 0.5; // Range of X velocity
+        let zVelocityRange = 0.5; // Range of Z velocity
+        let particleCount = 2000; // Initial particle count
+
+        function init() {
+
+            // Create the scene
+            scene = new THREE.Scene();
+
+            // Create the camera and set its initial position
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 35;
+            camera.position.y = 30;
+            camera.position.x = 20;
+
+            // Set the rotation of the camera along the x, y, and z axes to specific values
+            camera.rotation.x = -3.9267786693436548;
+            camera.rotation.y = -1.2129130706521847;
+            camera.rotation.z = -1.9486922784267893;
+
+            // Set the camera's target to a specific position (0, 30, 0) for it to look at
+            camera.lookAt(new THREE.Vector3(0, 30, 0));
+
+            // Set up the renderer and its settings
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.toneMapping = THREE.ReinhardToneMapping;
+            renderer.domElement.id = 'renderer';
+            renderer.setClearColor(0x000000); // Set background color to black
+            renderer.domElement.style.position = 'fixed';
+            renderer.domElement.style.zIndex = '-3';
+            renderer.domElement.style.left = '0';
+            renderer.domElement.style.top = '0';
+            document.body.appendChild(renderer.domElement);
+
+            // Create a grid helper
+            var gridSize = 100;
+            var gridDivisions = 50;
+            var grid = new THREE.GridHelper(gridSize, gridDivisions);
+            scene.add(grid);
+
+            // Set up the controls for camera movement
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 2; // Adjust the rotation speed if needed
+            controls.target.set(0, 5, 0); // Set the target position that the controls will orbit around
+            controls.enableDamping = true; // Enable damping for smooth controls movement
+            controls.dampingFactor = 0.05; // Adjust the damping factor for the controls
+            controls.update(); // Update the controls to apply the initial position
+
+            camera.rotation.y = -1.2129130706521847;
+
+            // Create particles and start the animation
+            createParticles();
+            animate();
+        }
+
+        // Create particles and set their properties
+        let particleRadiusRange = { min: 0.1, max: 0.6 }; // Range of particle radius
+
+        let yVelocityRange = { min: 0.1, max: 2 }; // Range of Y velocity
+
+        // Function to create particles
+        function createParticles() {
+            const colorStart = new THREE.Color(0xffff00); // Yellow
+            const colorEnd = new THREE.Color(0xffa500); // Orange
+
+            for (let i = 0; i < particleCount; i++) {
+                const radius = Math.random() * (particleRadiusRange.max - particleRadiusRange.min) + particleRadiusRange.min;
+                const geometry = new THREE.SphereGeometry(radius);
+                const material = new THREE.MeshBasicMaterial({ color: colorStart.clone().lerp(colorEnd, Math.random()) });
+                const particle = new THREE.Mesh(geometry, material);
+                particle.position.set(0, 0, 0);
+                particle.velocity = new THREE.Vector3(
+                    Math.random() * xVelocityRange - xVelocityRange / 2,
+                    Math.random() * (yVelocityRange.max - yVelocityRange.min) + yVelocityRange.min,
+                    Math.random() * zVelocityRange - zVelocityRange / 2
+                );
+
+                particles.push(particle);
+                scene.add(particle);
+            }
+        }
+
+        // Function to adjust the range of Y velocities for particles
+        function adjustYVelocityRange(minValue, maxValue) {
+            yVelocityRange.min = minValue;
+            yVelocityRange.max = maxValue;
+            updateYVelocity();
+        }
+
+        // Function to update the Y velocity of all particles
+        function updateYVelocity() {
+            for (let i = 0; i < particles.length; i++) {
+                const particle = particles[i];
+                particle.velocity.y = Math.random() * (yVelocityRange.max - yVelocityRange.min) + yVelocityRange.min;
+            }
+        }
+
+        // Function to adjust the range of particle radii
+        function adjustParticleRadiusRange(minValue, maxValue) {
+            particleRadiusRange.min = minValue;
+            particleRadiusRange.max = maxValue;
+            updateParticleRadius();
+        }
+
+        // Function to update the radius of all particles
+        function updateParticleRadius() {
+            for (let i = 0; i < particles.length; i++) {
+                const particle = particles[i];
+                const radius = Math.random() * (particleRadiusRange.max - particleRadiusRange.min) + particleRadiusRange.min;
+                particle.geometry.dispose(); // Dispose the existing geometry
+                particle.geometry = new THREE.SphereGeometry(radius); // Create new geometry with adjusted radius
+            }
+        }
+
+        function animate() {
+            // Animation loop
+            requestAnimationFrame(animate);
+
+            const restartHeight = fountainHeight; // Height at which particles will restart from the center
+
+            for (let i = 0; i < particles.length; i++) {
+                const particle = particles[i];
+                particle.velocity.y -= 0.01 + Math.random() * 0.1; // Apply random friction to the vertical velocity
+                particle.position.add(particle.velocity);
+
+                if (particle.position.y < resetHeight) {
+                    particle.position.set(0, 0, 0); // Reset position to the center
+                    const x = Math.random() * xVelocityRange - xVelocityRange / 2; // Random X velocity within range
+                    const z = Math.random() * zVelocityRange - zVelocityRange / 2; // Random Z velocity within range
+                    particle.velocity.set(x, Math.random() * 2, z); // Randomize new velocity
+                }
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Function to adjust the height of the fountain
+        function adjustFountainHeight(value) {
+            fountainHeight = value;
+            resetHeight = -fountainHeight;
+        }
+
+        // Function to adjust the range of X velocities for particles
+        function adjustXVelocityRange(value) {
+            xVelocityRange = value;
+        }
+
+        // Function to adjust the range of Z velocities for particles
+        function adjustZVelocityRange(value) {
+            zVelocityRange = value;
+        }
+
+        // Function to adjust the number of particles
+        function adjustParticleCount(value) {
+            if (value !== particleCount) {
+                particleCount = value;
+                updateParticleCount();
+            }
+        }
+
+        // Function to update the number of particles
+        function updateParticleCount() {
+            const currentParticleCount = particles.length;
+
+            if (particleCount > currentParticleCount) {
+                const particleDiff = particleCount - currentParticleCount;
+                addParticles(particleDiff);
+            } else if (particleCount < currentParticleCount) {
+                const particleDiff = currentParticleCount - particleCount;
+                removeParticles(particleDiff);
+            }
+        }
+
+        // Function to add particles
+        function addParticles(count) {
+            const geometry = new THREE.SphereGeometry(0.1);
+            const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+            for (let i = 0; i < count; i++) {
+                const particle = new THREE.Mesh(geometry, material);
+                particle.position.set(0, 0, 0);
+                particle.velocity = new THREE.Vector3(
+                    Math.random() * xVelocityRange - xVelocityRange / 2,
+                    Math.random() * 2,
+                    Math.random() * zVelocityRange - zVelocityRange / 2
+                );
+                particles.push(particle);
+                scene.add(particle);
+            }
+        }
+
+        // Function to remove particles
+        function removeParticles(count) {
+            for (let i = 0; i < count; i++) {
+                const particle = particles.pop();
+                scene.remove(particle);
+            }
+        }
+
+        // Event listener for window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize the scene
+        init();
+
+        // UI Sliders
+
+        // Create a container for the UI sliders
+        const uiContainer = document.createElement('div');
+        uiContainer.id = 'ui-container';
+
+        // Create a label for the fountain height slider
+        const fountainHeightLabel = document.createElement('div');
+        fountainHeightLabel.className = 'slider-label';
+        fountainHeightLabel.innerHTML = 'Fountain Height:';
+
+        // Create a slider for adjusting the fountain height
+        const fountainHeightSlider = document.createElement('input');
+        fountainHeightSlider.type = 'range';
+        fountainHeightSlider.min = '1';
+        fountainHeightSlider.max = '10';
+        fountainHeightSlider.step = '.25';
+        fountainHeightSlider.value = fountainHeight;
+        fountainHeightSlider.addEventListener('input', (event) => adjustFountainHeight(event.target.value));
+
+        // Create a label for the X velocity range slider
+        const xVelocityRangeLabel = document.createElement('div');
+        xVelocityRangeLabel.className = 'slider-label';
+        xVelocityRangeLabel.innerHTML = 'X Velocity Range:';
+
+        // Create a slider for adjusting the X velocity range
+        const xVelocityRangeSlider = document.createElement('input');
+        xVelocityRangeSlider.type = 'range';
+        xVelocityRangeSlider.min = '0.1';
+        xVelocityRangeSlider.max = '1';
+        xVelocityRangeSlider.step = '0.1';
+        xVelocityRangeSlider.value = xVelocityRange;
+        xVelocityRangeSlider.addEventListener('input', (event) => adjustXVelocityRange(event.target.value));
+
+        // Create a label for the Z velocity range slider
+        const zVelocityRangeLabel = document.createElement('div');
+        zVelocityRangeLabel.className = 'slider-label';
+        zVelocityRangeLabel.innerHTML = 'Z Velocity Range:';
+
+        // Create a slider for adjusting the Z velocity range
+        const zVelocityRangeSlider = document.createElement('input');
+        zVelocityRangeSlider.type = 'range';
+        zVelocityRangeSlider.min = '0.1';
+        zVelocityRangeSlider.max = '1';
+        zVelocityRangeSlider.step = '0.1';
+        zVelocityRangeSlider.value = zVelocityRange;
+        zVelocityRangeSlider.addEventListener('input', (event) => adjustZVelocityRange(event.target.value));
+
+        // Create a label for the particle count slider
+        const particleCountLabel = document.createElement('div');
+        particleCountLabel.className = 'slider-label';
+        particleCountLabel.innerHTML = 'Particle Count:';
+
+        // Create a slider for adjusting the particle count
+        const particleCountSlider = document.createElement('input');
+        particleCountSlider.type = 'range';
+        particleCountSlider.min = '1000';
+        particleCountSlider.max = '20000';
+        particleCountSlider.step = '1000';
+        particleCountSlider.value = particleCount;
+        particleCountSlider.addEventListener('input', (event) => adjustParticleCount(event.target.value));
+
+        // Append the UI elements to the UI container
+        uiContainer.appendChild(fountainHeightLabel);
+        uiContainer.appendChild(fountainHeightSlider);
+        uiContainer.appendChild(xVelocityRangeLabel);
+        uiContainer.appendChild(xVelocityRangeSlider);
+        uiContainer.appendChild(zVelocityRangeLabel);
+        uiContainer.appendChild(zVelocityRangeSlider);
+        uiContainer.appendChild(particleCountLabel);
+        uiContainer.appendChild(particleCountSlider);
+
+        // Create a label for the Y velocity range slider
+        const yVelocityRangeLabel = document.createElement('div');
+        yVelocityRangeLabel.className = 'slider-label';
+        yVelocityRangeLabel.innerHTML = 'Y Velocity Range:';
+
+        // Create a slider for adjusting the Y velocity range
+        const yVelocityRangeSlider = document.createElement('input');
+        yVelocityRangeSlider.type = 'range';
+        yVelocityRangeSlider.min = '0.1';
+        yVelocityRangeSlider.max = '5';
+        yVelocityRangeSlider.step = '0.1';
+        yVelocityRangeSlider.value = yVelocityRange.max;
+        yVelocityRangeSlider.addEventListener('input', (event) => {
+            const maxValue = parseFloat(event.target.value);
+            const minValue = parseFloat(yVelocityRangeSlider.min);
+            adjustYVelocityRange(minValue, maxValue);
+        });
+
+        // Append the Y velocity range elements to the UI container
+        uiContainer.appendChild(yVelocityRangeLabel);
+        uiContainer.appendChild(yVelocityRangeSlider);
+
+        // Create a label for the particle radius range slider
+        const particleRadiusRangeLabel = document.createElement('div');
+        particleRadiusRangeLabel.className = 'slider-label';
+        particleRadiusRangeLabel.innerHTML = 'Particle Radius Range:';
+
+        // Create a slider for adjusting the particle radius range
+        const particleRadiusRangeSlider = document.createElement('input');
+        particleRadiusRangeSlider.type = 'range';
+        particleRadiusRangeSlider.min = '0.1';
+        particleRadiusRangeSlider.max = '1';
+        particleRadiusRangeSlider.step = '0.1';
+        particleRadiusRangeSlider.value = particleRadiusRange.max;
+        particleRadiusRangeSlider.addEventListener('input', (event) => {
+            const maxValue = parseFloat(event.target.value);
+            const minValue = parseFloat(particleRadiusRangeSlider.min);
+            adjustParticleRadiusRange(minValue, maxValue);
+        });
+
+        // Append the particle radius range elements to the UI container
+        uiContainer.appendChild(particleRadiusRangeLabel);
+        uiContainer.appendChild(particleRadiusRangeSlider);
+
+        // Find the element with the class name "sub-content"
+        const container = document.querySelector('.ui-container ');
+
+        // Append the UI container to the container element
+        container.appendChild(uiContainer);
+
+
+    </script>
+
+
+</body>
+</html>
