@@ -6,7 +6,7 @@
 KAIST 우원정
 
 ## 개발환경
-- React
+- React Three Fiber
 - Three JS
 
 ### 1.0 어린왕자
