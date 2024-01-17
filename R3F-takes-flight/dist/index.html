@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flying with three js</title>
+  <style>
+    @keyframes fadeOut {
+      from {
+        display: block;
+        opacity: 1;
+      }
+
+      to {
+        display: none;
+        opacity: 0;
+      }
+    }
+  </style>
+  <script type="module" crossorigin src="./assets/index-37109411.js"></script>
+  <link rel="stylesheet" href="./assets/index-bf53c341.css">
+</head>
+
+<body>
+  <div id="loader">
+    <img src="./assets/loadingGIF-da28bd6f.gif" alt="Loading..." 
+      style="position: fixed; width: 100vw; height: 100vh;"/>
+  </div>
+  <img id="instructionImage" src="./assets/instructionImage-e826d01d.png" alt="Instruction Image"
+    style="position: fixed; padding: 10vh; height: 30vh; right: 0; bottom: 0; z-index: 10; animation: fadeOut 3s ease-in-out 3s forwards; display: none;" />
+  <img id="exploreButton" src="./assets/land-b01f8a9e.png" alt="Explore Button"
+    style="position: fixed; margin-bottom: 20vh; height: 10vh; bottom: 0; z-index: 10; display: none; left: 50%; transform: translateX(-50%);" />
+  <div id="root"></div>
+  <img id="leaveButton" src="./assets/leave-90dfa60d.png" alt="Leave Button"
+    style="position: fixed; margin-bottom: 20vh; height: 10vh; bottom: 0; z-index: 10; display: none; left: 50%; transform: translateX(-50%);" />
+  
+  
+    <script>
+      var preloader = document.getElementById('loader');
+      var instruction = document.getElementById('instructionImage');
+      function preLoaderHandler(){
+          preloader.style.display = 'none';
+          instruction.style.display = 'block';
+      }
+    </script>
+</body>
+
+</html>
