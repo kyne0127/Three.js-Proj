@@ -14,6 +14,7 @@ import { Planet_Vanity } from "./Planet_Vanity";
 import { Planet_LittlePrince } from "./LittlePrincePlanet";
 import { findClosestPlanet } from "./clickHandler";
 import { Planet_Geographer_position } from "./Planet_Geographer";
+import { B612 } from "./B612";
 
 const LINE_NB_POINTS = 100;
 
@@ -156,6 +157,7 @@ function App() {
       <Planet_King explorebuttonClicked={explorebuttonClicked} />
       <Planet_Lamplighter explorebuttonClicked={explorebuttonClicked} />
       <Planet_Vanity explorebuttonClicked={explorebuttonClicked} />
+      <B612 />
 
 
       <directionalLight
